@@ -2,8 +2,8 @@
 pragma solidity >=0.7.5;
 pragma abicoder v2;
 
-import '@openzeppelin/contracts/token/ERC721/IERC721Metadata.sol';
-import '@openzeppelin/contracts/token/ERC721/IERC721Enumerable.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/IERC721Metadata.sol';
+import '@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol';
 
 import './IPoolInitializer.sol';
 import './IERC721Permit.sol';
@@ -164,6 +164,18 @@ interface INonfungiblePositionManager is
         uint128 amount1Max;
     }
 
+    struct RemoveLiquidityParams {
+        uint256 tokenId;
+        uint128 liquidity;
+    }
+
+    struct TokenPosition {
+        uint tokenId;
+        address pool;
+        int24 lowerTick;
+        int24 upperTick;
+    }
+    
     /// @notice Collects up to a maximum amount of fees owed to a specific position to the recipient
     /// @param params tokenId The ID of the NFT for which tokens are being collected,
     /// recipient The account that should receive the tokens,

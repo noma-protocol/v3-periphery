@@ -31,18 +31,21 @@ library PoolAddress {
     /// @param key The PoolKey
     /// @return pool The contract address of the V3 pool
     function computeAddress(address factory, PoolKey memory key) internal pure returns (address pool) {
-        require(key.token0 < key.token1);
-        pool = address(
-            uint256(
-                keccak256(
-                    abi.encodePacked(
-                        hex'ff',
-                        factory,
-                        keccak256(abi.encode(key.token0, key.token1, key.fee)),
-                        POOL_INIT_CODE_HASH
-                    )
-                )
+        require(key.token0 < key.token1, "Tokens not in order");
+        
+        // EDIT: 0.8 compatibility
+        // Compute the hash
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                hex'ff',
+                factory,
+                keccak256(abi.encode(key.token0, key.token1, key.fee)),
+                POOL_INIT_CODE_HASH
             )
         );
+
+        // Convert the hash (bytes32) to an address
+        pool = address(uint160(uint256(hash)));
     }
+
 }
